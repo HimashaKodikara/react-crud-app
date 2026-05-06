@@ -18,9 +18,9 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/inbox', function () {
-    return Inertia::render('Inbox');
-})->middleware(['auth', 'verified'])->name('inbox');
+Route::get('/manageproduct', function () {
+    return Inertia::render('ManageProduct');
+})->middleware(['auth', 'verified'])->name('manageproduct');
 
 Route::get('/documents', function () {
     return Inertia::render('Documents');
