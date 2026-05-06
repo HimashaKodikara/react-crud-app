@@ -4,7 +4,6 @@ import {
     Home,
     Inbox,
     FileText,
-    Calendar,
     Settings,
     Info,
     Menu,
@@ -111,20 +110,17 @@ export default function FluxLayout({ children }: PropsWithChildren) {
                                 Home
                             </Link>
                             <Link
-                                href={route("manageproduct")}
-                                className={`flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium ${route().current("manageproduct") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
+                                href={route("manageproduct.index")}
+                                className={`flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium ${route().current("manageproduct.*") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
                             >
                                 <div className="flex items-center gap-3">
                                     <Inbox
-                                        className={`h-5 w-5 ${route().current("manageproduct") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
+                                        className={`h-5 w-5 ${route().current("manageproduct.*") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
                                     />
                                     Manage Product
                                 </div>
-                                <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
-                                    12
-                                </span>
                             </Link>
-                            <Link
+                            {/* <Link
                                 href={route("documents")}
                                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${route().current("documents") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
                             >
@@ -132,8 +128,8 @@ export default function FluxLayout({ children }: PropsWithChildren) {
                                     className={`h-5 w-5 ${route().current("documents") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
                                 />
                                 Documents
-                            </Link>
-                            <Link
+                            </Link> */}
+                            {/* <Link
                                 href={route("calendar")}
                                 className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${route().current("calendar") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
                             >
@@ -141,7 +137,7 @@ export default function FluxLayout({ children }: PropsWithChildren) {
                                     className={`h-5 w-5 ${route().current("calendar") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
                                 />
                                 Calendar
-                            </Link>
+                            </Link> */}
                         </nav>
 
                         {/* Favorites Group */}

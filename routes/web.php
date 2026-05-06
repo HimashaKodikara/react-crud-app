@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,21 +15,17 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-Route::get('/manageproduct', function () {
-    return Inertia::render('ManageProduct');
-})->middleware(['auth', 'verified'])->name('manageproduct');
+    Route::resource('manageproduct', ProductController::class);
 
-Route::get('/documents', function () {
-    return Inertia::render('Documents');
-})->middleware(['auth', 'verified'])->name('documents');
+});
 
-Route::get('/calendar', function () {
-    return Inertia::render('Calendar');
-})->middleware(['auth', 'verified'])->name('calendar');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
