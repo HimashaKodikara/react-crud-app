@@ -1,26 +1,33 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import FluxLayout from '@/Layouts/FluxLayout';
+import { Head, usePage } from '@inertiajs/react';
 
 export default function Dashboard() {
+    const user = usePage().props.auth.user;
+
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
-            }
-        >
+        <FluxLayout>
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
-                        </div>
+            <div className="max-w-7xl mx-auto w-full">
+                <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    Good afternoon, {user.name.split(' ')[0]}
+                </h1>
+                
+                <p className="mb-6 mt-2 text-base text-zinc-600 dark:text-zinc-400">
+                    Here's what's new today
+                </p>
+                
+                <div className="h-px w-full bg-zinc-200 dark:bg-zinc-700 mb-8" aria-hidden="true" />
+                
+                {/* Placeholder for actual dashboard widgets */}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {/* Example Card */}
+                    <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+                        <h3 className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Users</h3>
+                        <p className="mt-2 text-3xl font-bold text-zinc-900 dark:text-zinc-100">1,234</p>
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </FluxLayout>
     );
 }
