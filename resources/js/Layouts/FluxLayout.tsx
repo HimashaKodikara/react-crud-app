@@ -12,6 +12,7 @@ import {
     ChevronDown,
 } from "lucide-react";
 import Dropdown from "@/Components/Dropdown";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function FluxLayout({
     header,
@@ -67,18 +68,9 @@ export default function FluxLayout({
                     {/* Sidebar Header */}
                     <div className="flex h-16 items-center justify-between px-4">
                         <Link href="/" className="flex items-center gap-3">
-                            <img
-                                src="https://fluxui.dev/img/demo/logo.png"
-                                alt="Acme Inc."
-                                className="h-8 w-auto dark:hidden"
-                            />
-                            <img
-                                src="https://fluxui.dev/img/demo/dark-mode-logo.png"
-                                alt="Acme Inc."
-                                className="h-8 w-auto hidden dark:block"
-                            />
+                            <ApplicationLogo className="h-8 w-auto fill-current text-indigo-600 dark:text-indigo-400" />
                             <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-                                Acme Inc.
+                                {import.meta.env.VITE_APP_NAME || "Laravel"}
                             </span>
                         </Link>
                         <button
