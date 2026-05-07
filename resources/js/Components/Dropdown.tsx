@@ -38,7 +38,19 @@ const Trigger = ({ children }: PropsWithChildren) => {
 
     return (
         <>
-            <div onClick={toggleOpen}>{children}</div>
+            <div
+                onClick={toggleOpen}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        toggleOpen();
+                    }
+                }}
+                role="button"
+                tabIndex={0}
+            >
+                {children}
+            </div>
 
             {open && (
                 <div
