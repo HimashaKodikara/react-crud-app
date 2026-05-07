@@ -1,14 +1,8 @@
 import FluxLayout from "@/Layouts/FluxLayout";
-import { Head, Link } from "@inertiajs/react";
-import { Button } from "@/Components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/Components/ui/card";
+import { Head } from "@inertiajs/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Field, Input, Label, Textarea } from "@headlessui/react";
+import { CustomTextarea } from "@/Components/ui/custom-textarea";
 
 export default function CreateProduct() {
     return (
@@ -22,24 +16,48 @@ export default function CreateProduct() {
             <Head title="Create Product" />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 ">
-                <Card size="sm" className="mx-auto w-full max-w-sm">
+                <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Small Card</CardTitle>
-                        <CardDescription>
-                            This card uses the small size variant.
-                        </CardDescription>
+                        <CardTitle>Create Product</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p>
-                            The card component supports a size prop that can be
-                            set to &quot;sm&quot; for a more compact appearance.
-                        </p>
+                        <form
+                            className="flex flex-col gap-4"
+                            autoCapitalize="off"
+                        >
+                            <div className="grid gap-6">
+                                <Field className="grid gap-2">
+                                    {/*Product Name*/}
+                                    <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                        {" "}
+                                        Product name
+                                    </Label>
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        placeholder="Product Name"
+                                        autoFocus
+                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
+                                    ></Input>
+                                </Field>
+                                <Field className="grid gap-2">
+                                    {/*Product Description*/}
+                                    <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                        Product Description
+                                    </Label>
+                                    <CustomTextarea />
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        type="text"
+                                        placeholder="Product Name"
+                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
+                                    ></Input>
+                                </Field>
+                            </div>
+                        </form>
                     </CardContent>
-                    <CardFooter>
-                        <Button variant="outline" size="sm" className="w-full">
-                            Action
-                        </Button>
-                    </CardFooter>
                 </Card>
             </div>
         </FluxLayout>
