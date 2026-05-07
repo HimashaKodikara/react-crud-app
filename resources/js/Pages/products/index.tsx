@@ -2,10 +2,25 @@ import FluxLayout from "@/Layouts/FluxLayout";
 import { usePage } from "@inertiajs/react";
 import { Head, Link } from "@inertiajs/react";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
+import {
+    CheckCircle2Icon,
+    AlertCircleIcon,
+    Eye,
+    Pencil,
+    Trash2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function ManageProduct() {
+interface Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    featured_image: string;
+    created_at: string;
+}
+export default function ManageProduct({ ...props }: { products: Product[] }) {
+    const { products } = props;
     const { flash } = usePage().props as any;
     const flashMessage = flash?.success || flash?.error;
     const [showAlert, setShowAlert] = useState(flashMessage ? true : false);
@@ -63,29 +78,77 @@ export default function ManageProduct() {
                                 <th className="p-4 border">#</th>
                                 <th className="p-4 border">Name</th>
                                 <th className="p-4 border">Description</th>
-                                <th className="p-4 border">Price</th>
+                                <th className="p-4 border">Price (Rs)</th>
                                 <th className="p-4 border">Featured Image</th>
                                 <th className="p-4 border">Created Date</th>
                                 <th className="p-4 border">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className="px-4 py-2 text-center border">
-                                    1
-                                </td>
-                                <td className="px-4 py-2 text-center border">
-                                    Moblie Phone
-                                </td>
-                                <td className="px-4 py-2 text-center border">
-                                    1200
-                                </td>
-                                <td className="px-4 py-2 text-center border"></td>
-                                <td className="px-4 py-2 text-center border">
-                                    2026-04-01
-                                </td>
-                                <td className="px-4 py-2 text-center border"></td>
-                            </tr>
+                            {products.map((product, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-2 text-center border">
+                                        {index + 1}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        {product.name}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        {product.description}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        {product.price}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        {product.featured_image ? (
+                                            <img
+                                                src={`/storage/${product.featured_image}`}
+                                                alt={product.name}
+                                                className="h-16 w-16 object-cover mx-auto rounded"
+                                            />
+                                        ) : (
+                                            <span className="text-gray-400">
+                                                No Image
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        {product.created_at}
+                                    </td>
+                                    <td className="px-4 py-2 text-center border">
+                                        <Link
+                                            as="button"
+                                            className="bg-sky-600 text-white p-2 rounded-lg cursor-pointer hover:opacity-90"
+                                            href={route(
+                                                "manageproduct.show",
+                                                product.id,
+                                            )}
+                                        >
+                                            <Eye size={20} />
+                                        </Link>
+                                        <Link
+                                            as="button"
+                                            className="ms-2 bg-blue-600 text-white p-2 rounded-lg cursor-pointer hover:opacity-90"
+                                            href={route(
+                                                "manageproduct.edit",
+                                                product.id,
+                                            )}
+                                        >
+                                            <Pencil size={18} />
+                                        </Link>
+                                        <Link
+                                            as="button"
+                                            className="ms-2 bg-red-600 text-white p-2 rounded-lg cursor-pointer hover:opacity-90"
+                                            href={route(
+                                                "manageproduct.destroy",
+                                                product.id,
+                                            )}
+                                        >
+                                            <Trash2 size={16} />
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

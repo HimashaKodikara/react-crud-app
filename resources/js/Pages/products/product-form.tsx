@@ -5,12 +5,13 @@ import { Button, Field, Input, Label } from "@headlessui/react";
 import { CustomTextarea } from "@/Components/ui/custom-textarea";
 import { FormEvent, FormEventHandler } from "react";
 
-export default function CreateProduct() {
+export default function CreateProduct({ ...props }) {
+    const { product } = props;
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        description: "",
-        price: "",
-        featured_image: null as File | null,
+        name: product?.name || "",
+        description: product?.description || "",
+        price: product?.price || "",
+        featured_image: product?.featured_image || null,
     });
 
     //Form submit handle
