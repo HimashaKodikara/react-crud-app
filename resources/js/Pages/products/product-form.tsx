@@ -3,7 +3,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { CustomTextarea } from "@/Components/ui/custom-textarea";
-import { FormEventHandler } from "react";
+import { FormEvent, FormEventHandler } from "react";
 
 export default function CreateProduct() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -13,15 +13,22 @@ export default function CreateProduct() {
         featured_image: null as File | null,
     });
 
-    const submit: FormEventHandler = (e) => {
+    //Form submit handle
+    const submit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         post(route("manageproduct.store"), {
             forceFormData: true,
-            onSuccess: () => reset(),
+            onSuccess: () => console.log("Form submitted"),
         });
+        console.log("data", data);
     };
 
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setData("featured_image", e.target.files[0]);
+        }
+    };
     return (
         <FluxLayout
             header={
@@ -33,6 +40,7 @@ export default function CreateProduct() {
             <Head title="Create Product" />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 ">
+                {/* Back to Products */}
                 <div className="ml-auto">
                     <Link
                         as="button"
@@ -134,14 +142,7 @@ export default function CreateProduct() {
                                         id="featured_image"
                                         name="featured_image"
                                         type="file"
-                                        onChange={(e) =>
-                                            setData(
-                                                "featured_image",
-                                                e.target.files
-                                                    ? e.target.files[0]
-                                                    : null,
-                                            )
-                                        }
+                                        onChange={handleFileUpload}
                                         className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
                                     ></Input>
                                     {errors.featured_image && (
@@ -153,8 +154,9 @@ export default function CreateProduct() {
                                 <Button
                                     type="submit"
                                     className="mt-4 w-fit cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+                                    disabled={processing}
                                 >
-                                    Save Product
+                                    {processing ? "Saving..." : "Save Product"}
                                 </Button>
                             </div>
                         </form>

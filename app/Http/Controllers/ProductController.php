@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductFormRequest;
 use App\Models\Product;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -26,10 +30,39 @@ class ProductController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
-        //
+        try {
+            $featuredImage = null;
+            $featuredImageOriginalName = null;
+
+            if ($request->hasFile('featured_image')) {
+                $file = $request->file('featured_image');
+                $featuredImageOriginalName = $file->getClientOriginalName();
+                $featuredImage = $file->store('products', 'public');
+            }
+
+            $product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'featured_image' => $featuredImage,
+                'Featured_image_original_name' => $featuredImageOriginalName,
+            ]);
+
+            if ($product) {
+                return redirect()->route('manageproduct.index')->with('success', 'Product created successfully');
+            }
+
+            return redirect()->route('manageproduct.index')->with('error', 'Unable to create product.');
+        } catch (Exception $e) {
+            Log::error('Product creation failed: '.$e->getMessage());
+
+            return redirect()->back()->with('error', 'Something went wrong.');
+        }
     }
 
     /**
