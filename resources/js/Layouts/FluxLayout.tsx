@@ -59,7 +59,7 @@ export default function FluxLayout({ children }: PropsWithChildren) {
 
             {/* Sidebar */}
             <div
-                className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-zinc-50 border-r border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+                className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white border-r border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 <div className="flex h-full flex-col">
                     {/* Sidebar Header */}
