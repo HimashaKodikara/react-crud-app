@@ -98,9 +98,9 @@ export default function Authenticated({
                                 >
                                     <path
                                         className={
-                                            !showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
+                                            showingNavigationDropdown
+                                                ? "hidden"
+                                                : "inline-flex"
                                         }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"

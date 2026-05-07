@@ -1,9 +1,8 @@
 import { Link, usePage } from "@inertiajs/react";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useState, ReactNode } from "react";
 import {
     Home,
     Inbox,
-    FileText,
     Settings,
     Info,
     Menu,
@@ -14,7 +13,10 @@ import {
 } from "lucide-react";
 import Dropdown from "@/Components/Dropdown";
 
-export default function FluxLayout({ children }: PropsWithChildren) {
+export default function FluxLayout({
+    header,
+    children,
+}: Readonly<PropsWithChildren<{ header?: ReactNode }>>) {
     const user = usePage().props.auth.user;
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -120,24 +122,6 @@ export default function FluxLayout({ children }: PropsWithChildren) {
                                     Manage Product
                                 </div>
                             </Link>
-                            {/* <Link
-                                href={route("documents")}
-                                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${route().current("documents") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
-                            >
-                                <FileText
-                                    className={`h-5 w-5 ${route().current("documents") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
-                                />
-                                Documents
-                            </Link> */}
-                            {/* <Link
-                                href={route("calendar")}
-                                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${route().current("calendar") ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"}`}
-                            >
-                                <Calendar
-                                    className={`h-5 w-5 ${route().current("calendar") ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-400"}`}
-                                />
-                                Calendar
-                            </Link> */}
                         </nav>
 
                         {/* Favorites Group */}
@@ -239,12 +223,26 @@ export default function FluxLayout({ children }: PropsWithChildren) {
                 <div
                     className="fixed inset-0 z-40 bg-zinc-900/80 backdrop-blur-sm lg:hidden"
                     onClick={toggleSidebar}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggleSidebar();
+                        }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Close sidebar"
                 ></div>
             )}
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto bg-white p-6 lg:p-8 dark:bg-zinc-800">
-                {children}
+            <main className="flex-1 flex flex-col overflow-y-auto bg-white dark:bg-zinc-800">
+                {header && (
+                    <header className="border-b border-zinc-200 px-6 py-4 lg:px-8 dark:border-zinc-700">
+                        {header}
+                    </header>
+                )}
+                <div className="p-6 lg:p-8 flex-1">{children}</div>
             </main>
         </div>
     );
