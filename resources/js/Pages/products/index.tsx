@@ -1,6 +1,5 @@
 import FluxLayout from "@/Layouts/FluxLayout";
-import { usePage, router } from "@inertiajs/react";
-import { Head, Link } from "@inertiajs/react";
+import { usePage, router, Head, Link } from "@inertiajs/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import DataTable from "datatables.net-react";
@@ -104,7 +103,7 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
     const options = {
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50],
-        order: [[0, "asc"]],
+        order: [[0, "asc"]] as [number, "asc" | "desc"][],
         dom: '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>',
         language: {
             search: "",
