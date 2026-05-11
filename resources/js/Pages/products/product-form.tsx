@@ -3,26 +3,32 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Button, Field, Input, Label } from "@headlessui/react";
 import { CustomTextarea } from "@/Components/ui/custom-textarea";
-import { FormEvent, FormEventHandler } from "react";
+import { FormEvent } from "react";
 
-export default function CreateProduct({ ...props }) {
-    const { product } = props;
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: product?.name || "",
-        description: product?.description || "",
-        price: product?.price || "",
-        featured_image: product?.featured_image || null,
+interface Product {
+    id?: number;
+    name: string;
+    description: string;
+    price: string | number;
+    featured_image?: string | null;
+}
+
+interface Props {
+    product?: Product;
+    isView?: boolean;
+}
+
+export default function ProductForm({ product, isView }: Props) {
+    const { data, setData, post, processing, errors } = useForm({
+        name: product?.name ?? "",
+        description: product?.description ?? "",
+        price: product?.price != null ? String(product.price) : "",
+        featured_image: null as File | null,
     });
 
-    //Form submit handle
     const submit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        post(route("manageproduct.store"), {
-            forceFormData: true,
-            onSuccess: () => console.log("Form submitted"),
-        });
-        console.log("data", data);
+        post(route("manageproduct.store"), { forceFormData: true });
     };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,23 +36,32 @@ export default function CreateProduct({ ...props }) {
             setData("featured_image", e.target.files[0]);
         }
     };
+
+    const pageTitle = isView
+        ? "View Product"
+        : product
+          ? "Edit Product"
+          : "Create Product";
+
+    const inputClass =
+        "block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700 disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-zinc-100";
     return (
         <FluxLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-zinc-800 dark:text-zinc-200">
-                    Create Product
+                    {pageTitle}
                 </h2>
             }
         >
-            <Head title="Create Product" />
+            <Head title={pageTitle} />
 
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 ">
-                {/* Back to Products */}
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                {/* Back button */}
                 <div className="ml-auto">
                     <Link
                         as="button"
                         href={route("manageproduct.index")}
-                        className="mt-4 w-fit cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+                        className="mt-4 w-fit cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
                         Back to Products
                     </Link>
@@ -54,7 +69,7 @@ export default function CreateProduct({ ...props }) {
 
                 <Card className="w-full">
                     <CardHeader>
-                        <CardTitle>Create Product</CardTitle>
+                        <CardTitle>{pageTitle}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form
@@ -63,6 +78,7 @@ export default function CreateProduct({ ...props }) {
                             autoCapitalize="off"
                         >
                             <div className="grid gap-6">
+                                {/* Product Name */}
                                 <Field className="grid gap-2">
                                     <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                         Product name
@@ -76,15 +92,16 @@ export default function CreateProduct({ ...props }) {
                                             setData("name", e.target.value)
                                         }
                                         placeholder="Product Name"
-                                        autoFocus
-                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
-                                    ></Input>
+                                        className={inputClass}
+                                    />
                                     {errors.name && (
                                         <div className="text-sm text-red-600">
                                             {errors.name}
                                         </div>
                                     )}
                                 </Field>
+
+                                {/* Description */}
                                 <Field className="grid gap-2">
                                     <Label
                                         htmlFor="description"
@@ -103,7 +120,8 @@ export default function CreateProduct({ ...props }) {
                                                 e.target.value,
                                             )
                                         }
-                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
+                                        disabled={isView}
+                                        className={inputClass}
                                     />
                                     {errors.description && (
                                         <div className="text-sm text-red-600">
@@ -111,6 +129,8 @@ export default function CreateProduct({ ...props }) {
                                         </div>
                                     )}
                                 </Field>
+
+                                {/* Price */}
                                 <Field className="grid gap-2">
                                     <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                         Product Price
@@ -124,41 +144,63 @@ export default function CreateProduct({ ...props }) {
                                             setData("price", e.target.value)
                                         }
                                         placeholder="Product Price"
-                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
-                                    ></Input>
+                                        disabled={isView}
+                                        className={inputClass}
+                                    />
                                     {errors.price && (
                                         <div className="text-sm text-red-600">
                                             {errors.price}
                                         </div>
                                     )}
                                 </Field>
+
+                                {/* Featured Image */}
                                 <Field className="grid gap-2">
-                                    <Label
-                                        htmlFor="featured_image"
-                                        className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
-                                    >
+                                    <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                         Featured Image
                                     </Label>
-                                    <Input
-                                        id="featured_image"
-                                        name="featured_image"
-                                        type="file"
-                                        onChange={handleFileUpload}
-                                        className="block w-full rounded-md border-0 py-1.5 text-zinc-900 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-zinc-800 dark:text-white dark:ring-zinc-700"
-                                    ></Input>
+
+                                    {isView ? (
+                                        product?.featured_image ? (
+                                            <img
+                                                src={`/storage/${product.featured_image}`}
+                                                alt={product.name}
+                                                className="h-40 w-40 object-cover rounded-md border border-zinc-200 dark:border-zinc-700"
+                                            />
+                                        ) : (
+                                            <span className="text-sm text-zinc-400 italic">
+                                                No image uploaded
+                                            </span>
+                                        )
+                                    ) : (
+                                        <Input
+                                            id="featured_image"
+                                            name="featured_image"
+                                            type="file"
+                                            onChange={handleFileUpload}
+                                            className={inputClass}
+                                        />
+                                    )}
+
                                     {errors.featured_image && (
                                         <div className="text-sm text-red-600">
                                             {errors.featured_image}
                                         </div>
                                     )}
                                 </Field>
-                                <Button
-                                    type="submit"
-                                    className="mt-4 w-fit cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
-                                    disabled={processing}
-                                >
-                                    {processing ? "Saving..." : "Save Product"}
-                                </Button>
+
+                                {/* Submit — only in create/edit mode */}
+                                {!isView && (
+                                    <Button
+                                        type="submit"
+                                        className="mt-4 w-fit cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50"
+                                        disabled={processing}
+                                    >
+                                        {processing
+                                            ? "Saving..."
+                                            : "Save Product"}
+                                    </Button>
+                                )}
                             </div>
                         </form>
                     </CardContent>

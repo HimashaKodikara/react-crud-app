@@ -79,17 +79,24 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Product $manageproduct)
     {
         return Inertia::render('products/product-form', [
-            'product' => $product,
+            'product' => [
+                'id' => $manageproduct->id,
+                'name' => $manageproduct->name,
+                'description' => $manageproduct->description,
+                'price' => $manageproduct->price,
+                'featured_image' => $manageproduct->featured_image,
+            ],
+            'isView' => true,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $manageproduct)
     {
         //
     }
@@ -97,7 +104,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $manageproduct)
     {
         //
     }
@@ -105,7 +112,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $manageproduct)
     {
         //
     }
