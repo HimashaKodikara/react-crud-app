@@ -16,10 +16,11 @@ interface Product {
 interface Props {
     product?: Product;
     isView?: boolean;
+    isEdit?: boolean;
 }
 
-export default function ProductForm({ product, isView }: Props) {
-    const { data, setData, post, processing, errors } = useForm({
+export default function ProductForm({ product, isView, isEdit }: Props) {
+    const { data, setData, post, put, processing, errors } = useForm({
         name: product?.name ?? "",
         description: product?.description ?? "",
         price: product?.price != null ? String(product.price) : "",
@@ -28,7 +29,14 @@ export default function ProductForm({ product, isView }: Props) {
 
     const submit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route("manageproduct.store"), { forceFormData: true });
+
+        if (isEdit) {
+            put(route("manageproduct.update", product?.id), {
+                forceFormData: true,
+            });
+        } else {
+            post(route("manageproduct.store"), { forceFormData: true });
+        }
     };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,13 +162,13 @@ export default function ProductForm({ product, isView }: Props) {
                                     )}
                                 </Field>
 
-                                {/* Featured Image */}
+                                {/*Display Featured Image */}
                                 <Field className="grid gap-2">
                                     <Label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                                         Featured Image
                                     </Label>
 
-                                    {isView ? (
+                                    {isView || isEdit ? (
                                         product?.featured_image ? (
                                             <img
                                                 src={`/storage/${product.featured_image}`}
@@ -197,8 +205,12 @@ export default function ProductForm({ product, isView }: Props) {
                                         disabled={processing}
                                     >
                                         {processing
-                                            ? "Saving..."
-                                            : "Save Product"}
+                                            ? isEdit
+                                                ? "Updating..."
+                                                : "Creating..."
+                                            : isEdit
+                                              ? "Update Product"
+                                              : "Create Product"}
                                     </Button>
                                 )}
                             </div>

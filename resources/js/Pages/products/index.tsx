@@ -1,5 +1,5 @@
 import FluxLayout from "@/Layouts/FluxLayout";
-import { usePage } from "@inertiajs/react";
+import { usePage, router } from "@inertiajs/react";
 import { Head, Link } from "@inertiajs/react";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import {
@@ -13,6 +13,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
+import { Button } from "@headlessui/react";
 
 DataTable.use(DT);
 
@@ -94,8 +95,7 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
     const options = {
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50],
-        order: [[0, "asc"]] as [number, string][],
-        // Move length to top-left, search to top-right; info and pagination stay bottom
+        order: [[0, "asc"]],
         dom: '<"dt-top-bar"lf>t<"dt-bottom-bar"ip>',
         language: {
             search: "",
@@ -205,13 +205,14 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                 table.dataTable thead tr th:last-child  { border-radius: 0 10px 0 0; }
 
                 table.dataTable tbody tr td {
-                    padding: 14px 16px;
+                    padding: 10px ;
                     font-size: 14px;
                     color: #282e39ff;
                     vertical-align: middle;
                     border-bottom: 1px solid #f0f1f8;
                     background: #fff;
                     transition: background .15s;
+                    text-align: center;
                 }
                 table.dataTable tbody tr:hover td { background: #f7f8ff; }
                 table.dataTable tbody tr:last-child td { border-bottom: none; }
@@ -220,13 +221,13 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                 table.dataTable thead .sorting:after,
                 table.dataTable thead .sorting_asc:after,
                 table.dataTable thead .sorting_desc:after {
-                    font-size: 10px;
-                    opacity: .5;
+                    font-size: 16px;
+                    opacity: .8;
                 }
 
                 /* ── Custom cell styles ── */
                 .dt-product-img {
-                    height: 100px;
+                    height: 70px;
                     width: 100px;
                     object-fit: cover;
                     border-radius: 8px;
@@ -242,14 +243,8 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                     text-align: center;
                 }
                 .price-badge {
-                    display: inline-block;
-                    background: #eef2ff;
-                    color: #4f46e5;
-                    font-weight: 600;
-                    font-size: 12.5px;
-                    padding: 3px 10px;
-                    border-radius: 20px;
-                    letter-spacing: .01em;
+                    font-weight: 400;
+                    font-size: 14px;
                 }
 
                 /* ── Bottom bar ── */
@@ -273,7 +268,7 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                     color: #6b7280 !important;
                     border-radius: 6px;
                     padding: 5px 9px !important;
-                    font-size: 13px;
+                    font-size: 15px;
                     cursor: pointer;
                     transition: background .15s, color .15s;
                     margin: 0 1px;
@@ -313,12 +308,9 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                 {/* Header row */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600">
-                            <Package size={16} />
-                        </span>
                         <div>
-                            <p className="text-sm font-semibold text-gray-800">
-                                Products
+                            <p className="text-lg font-semibold text-gray-800">
+                                Manage Product
                             </p>
                             <p className="text-xs text-gray-400">
                                 {products.length} total
@@ -368,18 +360,31 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                                         >
                                             <Pencil size={14} />
                                         </Link>
-                                        <Link
-                                            as="button"
-                                            method="delete"
-                                            className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors border border-red-100"
-                                            href={route(
-                                                "manageproduct.destroy",
-                                                { manageproduct: id },
-                                            )}
-                                            title="Delete"
+                                        <Button
+                                            className="ms-2 cursor-pointer rounded-lg bg-red-400 p-2 text-white hover:opacity-90"
+                                            onClick={() => {
+                                                if (
+                                                    confirm(
+                                                        "Are you sure you want to delete this product?",
+                                                    )
+                                                ) {
+                                                    router.delete(
+                                                        route(
+                                                            "manageproduct.destroy",
+                                                            {
+                                                                manageproduct:
+                                                                    id,
+                                                            },
+                                                        ),
+                                                        {
+                                                            preserveScroll: true,
+                                                        },
+                                                    );
+                                                }
+                                            }}
                                         >
                                             <Trash2 size={14} />
-                                        </Link>
+                                        </Button>
                                     </div>
                                 );
                             },

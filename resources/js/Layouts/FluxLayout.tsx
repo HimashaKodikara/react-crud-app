@@ -24,7 +24,7 @@ export default function FluxLayout({
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     return (
-        <div className="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-800 dark:text-zinc-100 flex flex-col lg:flex-row">
+        <div className="h-screen overflow-hidden bg-white text-zinc-900 antialiased dark:bg-zinc-800 dark:text-zinc-100 flex flex-col lg:flex-row">
             {/* Mobile Header */}
             <header className="flex h-16 items-center justify-between border-b border-zinc-200 bg-white px-4 dark:border-zinc-700 dark:bg-zinc-900 lg:hidden">
                 <button
@@ -62,7 +62,7 @@ export default function FluxLayout({
 
             {/* Sidebar */}
             <div
-                className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white border-r border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+                className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-white border-r border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 lg:flex-shrink-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 <div className="flex h-full flex-col">
                     {/* Sidebar Header */}
@@ -228,7 +228,7 @@ export default function FluxLayout({
             )}
 
             {/* Main Content */}
-            <main className="flex-1 flex flex-col overflow-y-auto bg-white dark:bg-zinc-800">
+            <main className="flex-1 flex flex-col overflow-y-auto bg-white dark:bg-zinc-800 h-full">
                 {header && (
                     <header className="border-b border-zinc-200 px-6 py-4 lg:px-8 dark:border-zinc-700">
                         {header}

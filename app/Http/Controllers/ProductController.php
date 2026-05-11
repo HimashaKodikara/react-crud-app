@@ -98,7 +98,10 @@ class ProductController extends Controller
      */
     public function edit(Product $manageproduct)
     {
-        //
+        return Inertia::render('products/product-form', [
+            'product' => $manageproduct,
+            'isEdit' => true,
+        ]);
     }
 
     /**
@@ -106,7 +109,28 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $manageproduct)
     {
-        //
+        try {
+            $manageproduct->name = $request->name;
+            $manageproduct->description = $request->description;
+            $manageproduct->price = $request->price;
+
+            if ($request->file('featured_image')) {
+                $featuredImage = $request->file('featured_image');
+                $featuredImageOriginalName = $featuredImage->getClientOriginalName();
+                $featuredImageName = $featuredImage->store('products', 'public');
+
+                $manageproduct->featured_image = $featuredImageName;
+                $manageproduct->featured_image_original_name = $featuredImageOriginalName;
+            }
+
+            $manageproduct->save();
+
+            return redirect()->route('manageproduct.index')->with('success', 'Product updated successfully');
+        } catch (Exception $e) {
+            Log::error('Product update failed: '.$e->getMessage());
+
+            return redirect()->back()->with('error', 'Unable to update product.');
+        }
     }
 
     /**
@@ -114,6 +138,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $manageproduct)
     {
-        //
+        try {
+            if ($manageproduct) {
+                $manageproduct->delete();
+
+                return redirect()->back()->with('success', 'Product deleted successfuly');
+            }
+
+            return redirect()->back()->with('error', 'Unable to delete product. Please try again later');
+        } catch (Exception $e) {
+            Log::error('Product deletion failed: '.$e->getMessage());
+
+            return redirect()->back()->with('error', 'Unable to delete product.Please try again later');
+        }
     }
 }
