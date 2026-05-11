@@ -66,7 +66,7 @@ export default function FluxLayout({
             >
                 <div className="flex h-full flex-col">
                     {/* Sidebar Header */}
-                    <div className="flex h-16 items-center justify-between px-4 bg-blue-100">
+                    <div className="flex h-16 items-center justify-between px-4 bg-gray-100">
                         <Link href="/" className="flex items-center gap-3">
                             <ApplicationLogo className="h-8 w-auto fill-current text-indigo-600 dark:text-indigo-400" />
                             <span className="font-semibold text-zinc-900 dark:text-zinc-100">
@@ -81,7 +81,7 @@ export default function FluxLayout({
                         </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6 bg-blue-100">
+                    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6 bg-gray-100">
                         {/* Search Placeholder */}
                         <div className="relative">
                             <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
@@ -145,7 +145,7 @@ export default function FluxLayout({
                     </div>
 
                     {/* Bottom Nav */}
-                    <div className="border-t border-zinc-200 p-4 dark:border-zinc-700 bg-blue-100">
+                    <div className="border-t border-zinc-200 p-4 dark:border-zinc-700 bg-gray-100">
                         <nav className="space-y-1 mb-4">
                             <Link
                                 href="#"
