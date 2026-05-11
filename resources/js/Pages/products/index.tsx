@@ -154,6 +154,7 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                     font-weight: 500;
                     color: #374151;
                     cursor: pointer;
+                    width: 80px;
                     transition: border-color .2s;
                 }
                 .dt-top-bar .dt-length select:focus {
