@@ -32,6 +32,7 @@
         "datatables.net-dt": "^2.3.8",
         "datatables.net-react": "^1.0.2",
         "lucide-react": "^1.14.0",
+        "sweetalert2": "^11.26.24",
         "tailwind-merge": "^3.5.0"
     }
 }

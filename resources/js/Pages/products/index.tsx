@@ -1,19 +1,12 @@
 import FluxLayout from "@/Layouts/FluxLayout";
 import { usePage, router } from "@inertiajs/react";
 import { Head, Link } from "@inertiajs/react";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {
-    CheckCircle2Icon,
-    AlertCircleIcon,
-    Eye,
-    Pencil,
-    Trash2,
-    Package,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
 import { Button } from "@headlessui/react";
+import Swal from "sweetalert2";
 
 DataTable.use(DT);
 
@@ -29,17 +22,33 @@ interface Product {
 export default function ManageProduct({ ...props }: { products: Product[] }) {
     const { products } = props;
     const { flash } = usePage().props as any;
-    const flashMessage = flash?.success || flash?.error;
-    const [showAlert, setShowAlert] = useState(flashMessage ? true : false);
     const tableRef = useRef<any>(null);
 
     useEffect(() => {
-        if (flashMessage) {
-            setShowAlert(true);
-            const timer = setTimeout(() => setShowAlert(false), 3000);
-            return () => clearTimeout(timer);
+        if (flash?.success) {
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: flash.success,
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: "top-end",
+            });
+        } else if (flash?.error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: flash.error,
+                timer: 4000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: "top-end",
+            });
         }
-    }, [flashMessage]);
+    }, [flash?.success, flash?.error]);
 
     const tableData = products.map((product) => [
         product.name,
@@ -289,22 +298,6 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
             `}</style>
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                {/* Flash Alerts */}
-                {showAlert && flash.success && (
-                    <Alert className="max-w-md ml-auto border-green-500 bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400">
-                        <CheckCircle2Icon className="h-4 w-4" />
-                        <AlertTitle>Success</AlertTitle>
-                        <AlertDescription>{flash.success}</AlertDescription>
-                    </Alert>
-                )}
-                {showAlert && flash.error && (
-                    <Alert variant="destructive" className="max-w-md ml-auto">
-                        <AlertCircleIcon className="h-4 w-4" />
-                        <AlertTitle>Error</AlertTitle>
-                        <AlertDescription>{flash.error}</AlertDescription>
-                    </Alert>
-                )}
-
                 {/* Header row */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -363,24 +356,35 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                                         <Button
                                             className="ms-2 cursor-pointer rounded-lg bg-red-400 p-2 text-white hover:opacity-90"
                                             onClick={() => {
-                                                if (
-                                                    confirm(
-                                                        "Are you sure you want to delete this product?",
-                                                    )
-                                                ) {
-                                                    router.delete(
-                                                        route(
-                                                            "manageproduct.destroy",
+                                                Swal.fire({
+                                                    title: "Delete Product?",
+                                                    text: "This action cannot be undone.",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonColor:
+                                                        "#ef4444",
+                                                    cancelButtonColor:
+                                                        "#6b7280",
+                                                    confirmButtonText:
+                                                        "Yes, delete it!",
+                                                    cancelButtonText: "Cancel",
+                                                    reverseButtons: true,
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        router.delete(
+                                                            route(
+                                                                "manageproduct.destroy",
+                                                                {
+                                                                    manageproduct:
+                                                                        id,
+                                                                },
+                                                            ),
                                                             {
-                                                                manageproduct:
-                                                                    id,
+                                                                preserveScroll: true,
                                                             },
-                                                        ),
-                                                        {
-                                                            preserveScroll: true,
-                                                        },
-                                                    );
-                                                }
+                                                        );
+                                                    }
+                                                });
                                             }}
                                         >
                                             <Trash2 size={14} />
