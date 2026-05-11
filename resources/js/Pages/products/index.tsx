@@ -270,30 +270,74 @@ export default function ManageProduct({ ...props }: { products: Product[] }) {
                     color: #9ca3af;
                 }
 
-                /* Pagination */
+                /* ── Pagination ── */
+                .dt-bottom-bar .dt-paging {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                }
+
                 .dt-bottom-bar .dt-paging .dt-paging-button {
-                    border: none !important;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 32px;
+                    height: 32px;
+                    padding: 0 6px;
+                    border: 0.5px solid transparent !important;
+                    border-radius: 8px;
                     background: transparent;
                     color: #6b7280 !important;
-                    border-radius: 6px;
-                    padding: 5px 9px !important;
-                    font-size: 15px;
+                    font-size: 13px;
+                    font-weight: 500;
+                    line-height: 1;
                     cursor: pointer;
-                    transition: background .15s, color .15s;
-                    margin: 0 1px;
+                    transition: background 0.15s, color 0.15s, border-color 0.15s;
+                    user-select: none;
                 }
-                .dt-bottom-bar .dt-paging .dt-paging-button:hover:not(.disabled) {
-                    background: #eef2ff !important;
-                    color: #4f46e5 !important;
+
+                .dt-bottom-bar .dt-paging .dt-paging-button:hover:not(.disabled):not(.current) {
+                    background: #f3f4f6 !important;
+                    color: #111827 !important;
+                    border-color: #e5e7eb !important;
                 }
+
+                .dt-bottom-bar .dt-paging .dt-paging-button:active:not(.disabled):not(.current) {
+                    background: #e5e7eb !important;
+                    transform: scale(0.96);
+                }
+
                 .dt-bottom-bar .dt-paging .dt-paging-button.current {
                     background: #6366f1 !important;
                     color: #fff !important;
+                    border-color: #6366f1 !important;
                     font-weight: 600;
+                    box-shadow: 0 1px 3px rgba(99, 102, 241, 0.35);
                 }
+
                 .dt-bottom-bar .dt-paging .dt-paging-button.disabled {
-                    opacity: .35;
-                    cursor: default;
+                    opacity: 0.3;
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
+
+                /* Previous / Next arrow buttons */
+                .dt-bottom-bar .dt-paging .dt-paging-button.first,
+                .dt-bottom-bar .dt-paging .dt-paging-button.previous,
+                .dt-bottom-bar .dt-paging .dt-paging-button.next,
+                .dt-bottom-bar .dt-paging .dt-paging-button.last {
+                    color: #9ca3af !important;
+                    font-size: 15px;
+                }
+
+                .dt-bottom-bar .dt-paging .dt-paging-button.first,
+                .dt-bottom-bar .dt-paging .dt-paging-button.previous {
+                    margin-right: 4px;
+                }
+
+                .dt-bottom-bar .dt-paging .dt-paging-button.next,
+                .dt-bottom-bar .dt-paging .dt-paging-button.last {
+                    margin-left: 4px;
                 }
             `}</style>
 
