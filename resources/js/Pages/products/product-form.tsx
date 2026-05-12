@@ -20,22 +20,26 @@ interface Props {
 }
 
 export default function ProductForm({ product, isView, isEdit }: Props) {
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         name: product?.name ?? "",
         description: product?.description ?? "",
         price: product?.price != null ? String(product.price) : "",
         featured_image: null as File | null,
+        _method: isEdit ? "PUT" : "POST",
     });
 
     const submit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (isEdit) {
-            put(route("manageproduct.update", product?.id), {
+            post(route("manageproduct.update", product?.id), {
                 forceFormData: true,
+                onSuccess: () => reset(),
             });
         } else {
-            post(route("manageproduct.store"), { forceFormData: true });
+            post(route("manageproduct.store"), {
+                onSuccess: () => reset(),
+            });
         }
     };
 
@@ -168,7 +172,8 @@ export default function ProductForm({ product, isView, isEdit }: Props) {
                                         Featured Image
                                     </Label>
 
-                                    {isView || isEdit ? (
+                                    {/* View mode: show image only */}
+                                    {isView ? (
                                         product?.featured_image ? (
                                             <img
                                                 src={`/storage/${product.featured_image}`}
@@ -181,13 +186,38 @@ export default function ProductForm({ product, isView, isEdit }: Props) {
                                             </span>
                                         )
                                     ) : (
-                                        <Input
-                                            id="featured_image"
-                                            name="featured_image"
-                                            type="file"
-                                            onChange={handleFileUpload}
-                                            className={inputClass}
-                                        />
+                                        /* Create / Edit mode */
+                                        <div className="flex flex-col gap-3">
+                                            {/* Show current image preview in edit mode */}
+                                            {isEdit &&
+                                                product?.featured_image && (
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                                                            Current image:
+                                                        </span>
+                                                        <img
+                                                            src={`/storage/${product.featured_image}`}
+                                                            alt={product.name}
+                                                            className="h-40 w-40 object-cover rounded-md border border-zinc-200 dark:border-zinc-700"
+                                                        />
+                                                    </div>
+                                                )}
+                                            {/* File uploader */}
+                                            <Input
+                                                id="featured_image"
+                                                name="featured_image"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleFileUpload}
+                                                className={inputClass}
+                                            />
+                                            {isEdit && (
+                                                <span className="text-xs text-zinc-400 italic">
+                                                    Leave empty to keep the
+                                                    current image.
+                                                </span>
+                                            )}
+                                        </div>
                                     )}
 
                                     {errors.featured_image && (

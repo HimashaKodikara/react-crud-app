@@ -6,7 +6,6 @@ use App\Http\Requests\ProductFormRequest;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -107,7 +106,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $manageproduct)
+    public function update(ProductFormRequest $request, Product $manageproduct)
     {
         try {
             $manageproduct->name = $request->name;
